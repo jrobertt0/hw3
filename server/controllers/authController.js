@@ -27,7 +27,7 @@ export const getTask = async (req, res) => {
 
 export const getTasks = async (req, res) => {
     User.findById(req.params.userid)
-        .then(user => res.send({"tasks": user.tasks}))
+        .then(user => res.send({tasks: user.tasks}))
             .catch(err => res.status(400).json('Error: ' + err))
 }
 
@@ -70,13 +70,13 @@ export const editTask = async (req, res) => {
 		.then(user => {
 			let tasks = user.tasks;
 			for(let i = 0; i < tasks.length; i++){
-				if(parseInt(tasks[i].id) === taskid){
+				if(parseInt(tasks[i].id) === parseInt(taskid)){
 					tasks[i].name = name;
 					tasks[i].description = description;
 				}
 			}
 			user.tasks = tasks;	
-			console.log(user.tasks);		
+			user.markModified('tasks');
 			user.save()
 				.then(() => res.json("status: success"))
 				.catch(err => res.status(400).json('Error: ' + err));
